@@ -1,0 +1,7 @@
+dark grey- #7F7F7F
+medium-grey- #BABABA
+light-grey- #F6F6F6
+green- #0ACF83
+black- #000000
+white- #FFFFFF
+yellow- FFC120
