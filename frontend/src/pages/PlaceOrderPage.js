@@ -56,7 +56,7 @@ const PlaceOrderPage = ({ history }) => {
 		0
 	);
 
-	cart.shippingPrice = cart.itemsPrice > 8000 ? 500 : 300;
+	cart.shippingPrice = cart.itemsPrice > 1000 ? 30 : 10;
 	cart.taxPrice = 0.18 * cart.itemsPrice;
 	cart.totalPrice = cart.itemsPrice + cart.taxPrice + cart.shippingPrice;
 
@@ -137,7 +137,7 @@ const PlaceOrderPage = ({ history }) => {
 																	maximumFractionDigits: 2,
 																	style: 'currency',
 																	currency:
-																		'INR',
+																		'USD',
 																}
 															)}
 														</Col>
@@ -170,7 +170,7 @@ const PlaceOrderPage = ({ history }) => {
 												).toLocaleString('en-IN', {
 													maximumFractionDigits: 2,
 													style: 'currency',
-													currency: 'INR',
+													currency: 'USD',
 												})}
 											</Col>
 										</Row>
@@ -186,7 +186,7 @@ const PlaceOrderPage = ({ history }) => {
 												).toLocaleString('en-IN', {
 													maximumFractionDigits: 2,
 													style: 'currency',
-													currency: 'INR',
+													currency: 'USD',
 												})}
 											</Col>
 										</Row>
@@ -202,7 +202,7 @@ const PlaceOrderPage = ({ history }) => {
 												).toLocaleString('en-IN', {
 													maximumFractionDigits: 2,
 													style: 'currency',
-													currency: 'INR',
+													currency: 'USD',
 												})}
 											</Col>
 										</Row>
@@ -218,7 +218,7 @@ const PlaceOrderPage = ({ history }) => {
 												).toLocaleString('en-IN', {
 													maximumFractionDigits: 2,
 													style: 'currency',
-													currency: 'INR',
+													currency: 'USD',
 												})}
 											</Col>
 										</Row>

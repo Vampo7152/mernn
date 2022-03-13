@@ -146,7 +146,7 @@ const ProductListPage = ({ history, match }) => {
 														{
 															maximumFractionDigits: 2,
 															style: 'currency',
-															currency: 'INR',
+															currency: 'USD',
 														}
 													)}
 											</td>

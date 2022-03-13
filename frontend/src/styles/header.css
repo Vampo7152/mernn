@@ -9,27 +9,26 @@ button.navbar-toggle-btn:focus {
     width: 12%;
 }
 .brand-name{
-    font-weight: 500;
+    font-weight: 550;
     font-size: 1.5rem;
-    color: #7F7F7F !important;
+    color: #BABABA !important;
     text-decoration: none;
     margin-left: 5rem;
 }
 .brand-name:hover{
-    color: #202020 !important;
+    color: #000000 !important;
 }
 .navbar-main{
-    background-color: #FFFFFF;
-    color: #BABABA;
-    height: 60px;
+    background-color: #FFFFFF ;
+    color: #000000;
+    height: 65px;
     display: flex;
     flex-direction: row;
-justify-content: center;
-align-items: center;
-
+    justify-content: center;
+    align-items: center;
 }
 .navbar-main:hover{
-    color: #202020;
+    color: #BABABA;
 }
 .nav-logo {
     width: 1.8em;
@@ -56,11 +55,19 @@ align-items: center;
     font-weight: bold;
 }
 
-.nav-avatar-container {
+.nav-avatar-container-profile{
     display: flex;
     align-items: center;
     margin-left: 0.8em;
     margin-right: 5rem;
+    color: white;
+} 
+.nav-avatar-container-login {
+    display: flex;
+    align-items: center;
+    margin-left: 0.8em;
+    margin-right: 5rem;
+    color: white;
 } 
 .cart-container{
     margin-left: 5rem;
@@ -119,7 +126,12 @@ align-items: center;
         max-width: 50%;
     }
 
-    .nav-avatar-container {
+    .nav-avatar-container-profile {
+        margin-left: 2rem;
+        padding: 0;
+    }
+    
+    .nav-avatar-container-login {
         margin-left: 2rem;
         padding: 0;
     }

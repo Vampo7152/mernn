@@ -42,7 +42,7 @@ const Product = ({ product }) => {
 						product.price.toLocaleString('en-IN', {
 							maximumFractionDigits: 2,
 							style: 'currency',
-							currency: 'INR',
+							currency: 'USD',
 						})}
 				</Card.Text>
 			</Card.Body>

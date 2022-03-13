@@ -175,7 +175,7 @@ const Header = () => {
 						)}
 
 						{userInfo ? (
-							<div className='nav-avatar-container'>
+							<div className='nav-avatar-container-profile'>
 								{/* show this container only on mobile screens */}
 								<LinkContainer
 									to='/profile'>
@@ -187,7 +187,7 @@ const Header = () => {
 								</LinkContainer>
 							</div>
 						) : (
-							<div className='nav-avatar-container'>
+							<div className='nav-avatar-container-login'>
 							<LinkContainer to='/login' variant='primary'>
 
 								<Nav.Link>

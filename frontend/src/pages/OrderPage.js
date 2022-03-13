@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Row, Col, ListGroup, Image, Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { PayPalButton } from 'react-paypal-button-v2'; // for paypal payments
 import axios from 'axios';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
@@ -21,6 +20,14 @@ import { loadStripe } from '@stripe/stripe-js';
 import { refreshLogin } from '../actions/userActions';
 import CheckoutForm from '../components/CheckoutForm'; //stripe checkout form
 import getDateString from '../utils/getDateString';
+import SolCheckout from './solCheckout.tsx'
+import {
+	Connection,
+	Transaction,
+	SystemProgram,
+	PublicKey,
+  } from "@solana/web3.js";
+
 
 const OrderPage = ({ match, history }) => {
 	// load stripe
@@ -101,6 +108,11 @@ const OrderPage = ({ match, history }) => {
 			payOrder(orderID, { ...paymentResult, paymentMode: 'paypal' })
 		);
 	};
+
+	const transferSol = async () => {
+	
+	};
+
 
 	// set order as delivered
 	const successDeliveryHandler = () => {
@@ -219,7 +231,7 @@ const OrderPage = ({ match, history }) => {
 																		maximumFractionDigits: 2,
 																		style: 'currency',
 																		currency:
-																			'INR',
+																			'USD',
 																	}
 																)}
 															</Col>
@@ -263,7 +275,7 @@ const OrderPage = ({ match, history }) => {
 													{
 														maximumFractionDigits: 2,
 														style: 'currency',
-														currency: 'INR',
+														currency: 'USD',
 													}
 												)}
 											</Col>
@@ -280,7 +292,7 @@ const OrderPage = ({ match, history }) => {
 													{
 														maximumFractionDigits: 2,
 														style: 'currency',
-														currency: 'INR',
+														currency: 'USD',
 													}
 												)}
 											</Col>
@@ -297,7 +309,7 @@ const OrderPage = ({ match, history }) => {
 													{
 														maximumFractionDigits: 2,
 														style: 'currency',
-														currency: 'INR',
+														currency: 'USD',
 													}
 												)}
 											</Col>
@@ -314,7 +326,7 @@ const OrderPage = ({ match, history }) => {
 													{
 														maximumFractionDigits: 2,
 														style: 'currency',
-														currency: 'INR',
+														currency: 'USD',
 													}
 												)}
 											</Col>
@@ -324,30 +336,15 @@ const OrderPage = ({ match, history }) => {
 									{!order.isPaid && (
 										<>
 											{order.paymentMethod ===
-											'PayPal' ? (
+											'Solana' ? (
 												<ListGroup.Item>
-													{loadingPay && <Loader />}
-													{!SDKReady ? (
-														<Loader />
-													) : (
-														<PayPalButton
-															style={{
-																shape: 'rect',
-																color: 'gold',
-																layout: 'vertical',
-																label: 'pay',
-															}}
-															currency='USD'
-															// converting INR to USD, as paypal cannot support INR
-															amount={Number(
-																order.totalPrice /
-																	72
-															).toFixed(2)}
-															onSuccess={
-																successPaymentHandler
-															}
-														/>
-													)}
+												
+												<SolCheckout
+												
+												amount = {order.totalPrice}
+												
+												/>
+												
 												</ListGroup.Item>
 											) : (
 												<ListGroup.Item>

@@ -114,7 +114,7 @@ const CartPage = ({ match, location, history }) => {
 										{item.price.toLocaleString('en-IN', {
 											maximumFractionDigits: 2,
 											style: 'currency',
-											currency: 'INR',
+											currency: 'USD',
 										})}
 
 										<div>
@@ -202,7 +202,7 @@ const CartPage = ({ match, location, history }) => {
 												{
 													maximumFractionDigits: 2,
 													style: 'currency',
-													currency: 'INR',
+													currency: 'USD',
 												}
 											)}
 
@@ -298,7 +298,7 @@ const CartPage = ({ match, location, history }) => {
 									.toLocaleString('en-IN', {
 										maximumFractionDigits: 2,
 										style: 'currency',
-										currency: 'INR',
+										currency: 'USD',
 									})}
 							</strong>
 						</ListGroup.Item>

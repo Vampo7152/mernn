@@ -80,11 +80,11 @@ const PaymentPage = ({ history }) => {
 							<Form.Check
 								inline
 								type='radio'
-								label='PayPal Account'
-								id='PayPal'
+								label='Solana Payment'
+								id='Solana'
 								name='paymentMethod'
-								value='PayPal'
-								checked={paymentMethod === 'PayPal'}
+								value='Solana'
+								checked={paymentMethod === 'Solana'}
 								onChange={handleChange}
 							/>
 						</Col>

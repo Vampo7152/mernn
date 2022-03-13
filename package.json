@@ -1,7 +1,7 @@
 {
-  "name": "mern-ecommerce-app",
+  "name": "mern",
   "version": "1.0.0",
-  "description": "MERN stack E-commerce app",
+  "description": "MERN",
   "main": "server.js",
   "type": "module",
   "engines": {
