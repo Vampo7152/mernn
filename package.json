@@ -17,7 +17,6 @@
     "data:destroy": "node backend/seeder.js -d",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
-
   "dependencies": {
     "aws-sdk": "^2.983.0",
     "bcryptjs": "^2.4.3",
@@ -42,9 +41,11 @@
     "passport-google-oauth20": "^2.0.0",
     "passport-linkedin-oauth2": "^2.0.0",
     "passport-twitter": "^1.0.4",
-    "stripe": "^8.176.0"
+    "stripe": "^8.176.0",
+    "typescript": "^4.6.2"
   },
   "devDependencies": {
+    "@types/react": "^17.0.40",
     "concurrently": "^6.2.0",
     "nodemon": "^2.0.8"
   }
