@@ -128,7 +128,7 @@ const ShippingPage = ({ history }) => {
 				<div className='d-flex'>
 					<Button
 						type='submit'
-						className='ms-auto'
+						className='ms-auto main-button'
 						style={{
 							padding: '0.5em 1em',
 							width: '8rem',

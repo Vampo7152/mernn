@@ -234,7 +234,7 @@ const PlaceOrderPage = ({ history }) => {
 										</ListGroup.Item>
 									)}
 									<ListGroup.Item className='d-grid gap-2'>
-										<Button
+										<Button className="main-button"
 											type='button'
 											size='lg'
 											disabled={!cartItems.length}

@@ -316,6 +316,14 @@ const ProductPage = ({ history, match }) => {
 									<strong>Description:</strong>{' '}
 									{product.description}
 								</ListGroup.Item>
+								<ListGroup.Item>
+									<strong>Category: </strong>{' '}
+									{product.category}
+								</ListGroup.Item>
+								<ListGroup.Item>
+									<strong>Brand: </strong>{' '}
+									{product.brand}
+								</ListGroup.Item>
 							</ListGroup>
 						</Col>
 						<Col md={3}>
@@ -423,7 +431,7 @@ const ProductPage = ({ history, match }) => {
 														<Button
 														onClick={connectWallet}
 														type='button'
-														className='btn-block btn-lg'
+														className='btn-block btn-lg main-button'
 														disabled={
 															!buttonStatus
 														}>
@@ -436,7 +444,7 @@ const ProductPage = ({ history, match }) => {
 													<Button
 													onClick={handleAddToCart}
 													type='button'
-													className='btn-block btn-lg'
+													className='btn-block btn-lg main-button'
 													disabled={
 														!buttonStatus
 													}>
@@ -451,7 +459,7 @@ const ProductPage = ({ history, match }) => {
 												<Button
 												onClick={handleAddToCart}
 												type='button'
-												className='btn-block btn-lg'
+												className='btn-block btn-lg main-button'
 												disabled={
 													!buttonStatus
 											}>

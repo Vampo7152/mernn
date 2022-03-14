@@ -90,7 +90,7 @@ const PaymentPage = ({ history }) => {
 						</Col>
 					</Form.Group>
 					<div className='d-grid'>
-						<Button type='submit' className='my-3' size='lg'>
+						<Button type='submit' className='my-3 main-button' size='lg'>
 							Continue
 						</Button>
 					</div>

@@ -41,3 +41,8 @@ button.cart-delete-btn {
         font-size: 0.8rem;
     }
 }
+
+.main-button{
+    background-color: black;
+    color: white;
+}

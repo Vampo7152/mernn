@@ -134,7 +134,7 @@ const CartPage = ({ match, location, history }) => {
 											justifyContent: 'space-between',
 										}}>
 										<ButtonGroup aria-label='Addtocart'>
-											<Button
+											<Button className="main-button"
 												style={{
 													outline: 'none',
 													borderRight:
@@ -174,7 +174,7 @@ const CartPage = ({ match, location, history }) => {
 												<i className='fas fa-minus' />
 											</Button>
 										</ButtonGroup>
-										<Button
+										<Button className="main-button"
 											type='button'
 											onClick={() =>
 												handleRemoveFromCart(
@@ -224,7 +224,7 @@ const CartPage = ({ match, location, history }) => {
 												justifyContent: 'space-between',
 												width: '50%',
 											}}>
-											<Button
+											<Button className="main-button"
 												type='button'
 												onClick={() =>
 													handleRemoveFromCart(
@@ -233,7 +233,7 @@ const CartPage = ({ match, location, history }) => {
 												}>
 												<i className='fas fa-trash' />
 											</Button>
-											<Button
+											<Button className="main-button"
 												style={{
 													outline: 'none',
 													borderRight:
@@ -254,7 +254,7 @@ const CartPage = ({ match, location, history }) => {
 												variant='primary'>
 												<i className='fas fa-plus' />
 											</Button>
-											<Button
+											<Button className="main-button"
 												style={{
 													outline: 'none',
 													borderLeft:
@@ -303,8 +303,8 @@ const CartPage = ({ match, location, history }) => {
 							</strong>
 						</ListGroup.Item>
 						<ListGroup.Item>
-							<div className='d-grid'>
-								<Button
+							<div className='d-grid main-button'>
+								<Button 
 									type='button'
 									size='lg'
 									disabled={!cartItems.length}
