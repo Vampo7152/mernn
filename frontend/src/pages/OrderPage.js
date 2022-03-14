@@ -353,10 +353,7 @@ const OrderPage = ({ match, history }) => {
 														stripe={stripePromise}>
 														{/* price in paisa */}
 														<CheckoutForm
-															price={
-																order.totalPrice *
-																100
-															}
+															price={order.totalPrice}
 															orderID={orderID}
 														/>
 													</Elements>

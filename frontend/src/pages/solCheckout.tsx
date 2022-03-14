@@ -112,9 +112,8 @@ const SolCheckout = (props:userData) =>{
         // Beneficiary wallet address below
         const bizOwnerAddress = "HTpmUfTzTjzT3vRtbaXJ6vAhhjfDJxjA4QKrKSqa23WQ";
         const receiver = new PublicKey(bizOwnerAddress);
-        const txid = await sendMoney(sender,receiver,solTotal);
-        console.log(txid);
-        
+        const signature = await sendMoney(sender,receiver,solTotal);
+        console.log(signature);
     }
 
     //UseEffects

@@ -5,6 +5,7 @@ import{
     SystemProgram,
     PublicKey
   } from '@solana/web3.js';
+  import { toast } from "react-toastify";
 
 export const connectWallet = async () =>{
     const wallet = getWallet();
@@ -34,13 +35,37 @@ export const connectWallet = async () =>{
       })
     );
 
-    const { blockhash } = await connection.getRecentBlockhash()
+    /*const { blockhash } = await connection.getRecentBlockhash()
     transaction.recentBlockhash = blockhash
-    transaction.feePayer = from
+    transaction.feePayer = from*/
 
-    let signedTransaction = await wallet.signTransaction(transaction)
+    
+   if(transaction){
+     try{
 
-    try {
+      let signed = await wallet.signTransaction(transaction)
+      console.log('Got signature, submitting transaction');
+  
+      let signature = await connection.sendRawTransaction(signed.serialize());
+        console.log('Submitted transaction ' + signature + ', awaiting confirmation');
+  
+        await connection.confirmTransaction(signature);
+        console.log('Transaction ' + signature + ' confirmed');
+
+       toast.success("Transaction completed Successfully!");
+        return signature
+
+     } catch(e){
+      console.warn(e);
+      console.log('Error: ' + (e));
+      toast.error(
+        "Transaction not completed!"
+      );
+     }
+   }return {
+    error: "No transaction found"
+ }
+   /* try {
         const txid = await connection.sendRawTransaction(
           signedTransaction.serialize()
         )
@@ -58,7 +83,7 @@ export const connectWallet = async () =>{
    
         }catch (error) {
         console.error(error)
-      }
+      } */
 
   }
   
