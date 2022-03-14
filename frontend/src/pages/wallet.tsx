@@ -52,14 +52,14 @@ export const connectWallet = async () =>{
         await connection.confirmTransaction(signature);
         console.log('Transaction ' + signature + ' confirmed');
 
-       toast.success("Transaction completed Successfully!");
+       toast.success("Transaction completed Successfully! 😄");
         return signature
 
      } catch(e){
       console.warn(e);
       console.log('Error: ' + (e));
       toast.error(
-        "Transaction not completed!"
+        "Transaction not completed! 😢"
       );
      }
    }return {
