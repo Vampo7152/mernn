@@ -38,7 +38,9 @@ export const connectWallet = async () =>{
     /*const { blockhash } = await connection.getRecentBlockhash()
     transaction.recentBlockhash = blockhash
     transaction.feePayer = from*/
-
+    const { blockhash } = await connection.getRecentBlockhash()
+    transaction.recentBlockhash = blockhash
+    transaction.feePayer = from
     
    if(transaction){
      try{
@@ -57,7 +59,7 @@ export const connectWallet = async () =>{
 
      } catch(e){
       console.warn(e);
-      console.log('Error: ' + (e));
+      console.log((e));
       toast.error(
         "Transaction not completed! 😢"
       );
