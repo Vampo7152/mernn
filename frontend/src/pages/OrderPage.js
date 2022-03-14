@@ -10,6 +10,8 @@ import {
 	payOrder,
 	deliverOrder,
 } from '../actions/orderActions';
+
+import { toast } from "react-toastify";
 import {
 	ORDER_PAY_RESET,
 	ORDER_DELIVER_RESET,
@@ -27,7 +29,7 @@ import {
 	SystemProgram,
 	PublicKey,
   } from "@solana/web3.js";
-
+import {SolPay} from './solPay' // importing SolPay Qr code model
 
 const OrderPage = ({ match, history }) => {
 	// load stripe
@@ -54,7 +56,24 @@ const OrderPage = ({ match, history }) => {
 	const userDetails = useSelector((state) => state.userDetails);
 	const { error: userLoginError } = userDetails;
 
-	// get new access tokens using the refresh token, is user details throws an error
+	const [showSolanaPay, setShowSolanaPay] = useState<boolean>(false); // Closing-Opening for Qr Code model
+	const [solTotal, setSolTotal] = useState<number>(0); // TOtal Sol Price to be added in Qr code
+
+// Qr Code link takes Amount or Cost in BigNumber(). To get it working we need to provide the prop with amount cost in $Sol
+// and not in USD. Just need to convert this {order.totalPrice} in Sol from below function and we are good to go!
+	const fetchSolPrice = async() => {
+		try {
+		  const {  } = await axios.get("https://api.coingecko.com/api/v3/simple/price?ids=solana&vs_currencies=usd");
+		  setSolTotal(data.solana.usd);
+		} catch (error) {
+		  toast.error('Unable to fetch SOL price.');
+		}
+	  }
+// setSolTotal added already, just need to convert total order amount here
+
+
+
+//  new access token
 	useEffect(() => {
 		if (userLoginError && userInfo && !userInfo.isSocialLogin) {
 			const user = JSON.parse(localStorage.getItem('userInfo'));
@@ -101,16 +120,9 @@ const OrderPage = ({ match, history }) => {
 		if (!SDKReady) addScript();
 	}, [userInfo, SDKReady, history]);
 
-	// save the payment mthod as paypal
-	const successPaymentHandler = (paymentResult) => {
-		dispatch(savePaymentMethod('PayPal'));
-		dispatch(
-			payOrder(orderID, { ...paymentResult, paymentMode: 'paypal' })
-		);
-	};
 
-	const transferSol = async () => {
-	
+	const showQr = () => {
+		setShowSolanaPay(true)
 	};
 
 
@@ -339,12 +351,16 @@ const OrderPage = ({ match, history }) => {
 											'Solana' ? (
 												<ListGroup.Item>
 												
-												<SolCheckout
-												
+												<SolCheckout 
 												amount = {order.totalPrice}
-												
 												/>
-												
+												{/* Show Qr code button fol qr code payment */}
+												<Button onClick={showQr}>Qr Code Payment</Button>
+												<SolPay
+													  open={showSolanaPay}
+													  closeModal={() => setShowSolanaPay(false)}
+													  cost={solTotal}
+													/> {/* solTotal all set for cost prop in Qr code*/}
 												</ListGroup.Item>
 											) : (
 												<ListGroup.Item>

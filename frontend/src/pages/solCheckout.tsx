@@ -78,8 +78,6 @@ const SolCheckout = (props:userData) =>{
                       response.publicKey.toString()
                     );
                     setWalletAddress(response.publicKey.toString());
-                   
-               
                 }else{
                     alert("Solana Object Not Found")
                 }
