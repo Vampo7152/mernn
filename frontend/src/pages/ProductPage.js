@@ -25,6 +25,8 @@ import { refreshLogin, getUserDetails } from '../actions/userActions';
 import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants';
 import getDateString from '../utils/getDateString';
 import '../styles/product-page.css';
+import { Connection, PublicKey, clusterApiUrl} from '@solana/web3.js';
+import { Metadata } from "@metaplex-foundation/mpl-token-metadata";
 
 const ProductPage = ({ history, match }) => {
 	const [quantity, setQuantity] = useState(1);
@@ -35,6 +37,17 @@ const ProductPage = ({ history, match }) => {
 	const [showReviewForm, setShowReviewForm] = useState(false); // bool to decide whether to show the review form or not
 	const dispatch = useDispatch();
 
+	// New
+		//Solana Wallet 
+	const [walletAddress, setWalletAddress] = useState(null);
+		// Set our network.
+	const network = clusterApiUrl('devnet');
+	const [validNFT, setValidNFT] = useState(false);
+	const [buttonStatus,setButtonStatus] = useState(false)
+	const [size, setSize] = useState(null);
+	const [sizeno, setSizeno] = useState(null);
+
+// Old
 	const userLogin = useSelector((state) => state.userLogin);
 	const { userInfo } = userLogin;
 
@@ -56,6 +69,103 @@ const ProductPage = ({ history, match }) => {
 	const orderListUser = useSelector((state) => state.orderListUser);
 	const { orders } = orderListUser;
 
+	
+
+	//wallet functions 
+
+	const checkIfWalletIsConnected = async () => {
+		try {
+		  const { solana } = window;
+	
+		  if (solana) {
+			if (solana.isPhantom) {
+			  console.log('Phantom wallet found!');
+	
+			   const response = await solana.connect({ onlyIfTrusted: true });
+			console.log(
+			  'Connected with Public Key:',
+			  response.publicKey.toString()
+			);
+			setWalletAddress(response.publicKey.toString());
+	
+			}
+		  } else {
+			alert('Solana object not found! Get a Phantom Wallet 👻');
+		  }
+		} catch (error) {
+		  console.error(error);
+		}
+	  };
+
+	  const getAllNFTs = async (tempAddress) =>{
+		  checkIfWalletIsConnected();
+		  console.log(tempAddress);
+		  const connection = new Connection(network);
+		  const ownerPublickey = new PublicKey(tempAddress);
+		  const nftsmetadata = await Metadata.findDataByOwner(connection, ownerPublickey);
+		  verifyNFT(nftsmetadata)
+	  }
+
+
+	const connectWallet = async () =>{
+		const { solana } = window;
+
+		if (solana) {
+		  const response = await solana.connect();
+		  console.log('Connected with Public Key:', response.publicKey.toString());
+		  setWalletAddress(response.publicKey.toString());
+		  getAllNFTs(response.publicKey.toString());
+		}
+	}
+
+	//verify NFT from wallet
+
+	const symbols = ["0xD"]
+	const nftProjectCreators = ["HMNWAwcDrU3dVNQxgxLc3bLYuJtBnXj2pE2FAGhzctK4"]
+
+	const symbolCheck = (symbol) =>{
+		for(var count=0 ; symbols>=count;count++){
+			if(symbols[count]=== symbol){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+	}
+
+	const creatorCheck = (creator) =>{
+		
+	for(var countofCreator = 0; creator.length>=countofCreator;countofCreator++){
+		console.log(creator[countofCreator].address);
+		for(var creatorCount = 0; nftProjectCreators.length>=creatorCount;creatorCount++){
+			if(nftProjectCreators[creatorCount] === creator[countofCreator].address){
+				return true;
+			}else{
+				continue;
+			}
+		}
+	}
+	}
+	
+	
+	const verifyNFT = async (nftMetaData) =>{
+
+		for(var i=0; nftMetaData.length > i; i++ ){
+
+			const symbolValid =  symbolCheck(nftMetaData[i].data.symbol)
+			const creatorValid =  creatorCheck(nftMetaData[i].data.creators)
+	
+			if(symbolValid === true && creatorValid ===true){
+				setValidNFT(true)
+				break;
+			}
+		}
+		//console.log(nftMetaData[0].data.symbol)
+		//console.log(nftMetaData[0].data.creators)
+	}
+
+ 
 	// fetch user login info
 	useEffect(() => {
 		userInfo
@@ -102,6 +212,14 @@ const ProductPage = ({ history, match }) => {
 			setShowReviewForm(true);
 		}
 	}, [product, userInfo]);
+
+	useEffect(()=>{
+		if(product.sizeStockCount!==undefined && product.ShoesizeStockCount !== undefined){
+			const temp = product.countInStock  > 0 || product.sizeStockCount[0].quantity > 0 || product.sizeStockCount[1].quantity > 0 || product.sizeStockCount[2].quantity > 0 || product.sizeStockCount[3].quantity > 0 || product.sizeStockCount[4].quantity > 0 || product.sizeStockCount[5].quantity > 0 || product.ShoesizeStockCount[0].quantity > 0 || product.ShoesizeStockCount[1].quantity > 0 || product.ShoesizeStockCount[2].quantity > 0 || product.ShoesizeStockCount[3].quantity > 0 || product.ShoesizeStockCount[4].quantity > 0 || product.ShoesizeStockCount[5].quantity > 0 || product.ShoesizeStockCount[6].quantity > 0 || product.ShoesizeStockCount[7].quantity > 0 || product.ShoesizeStockCount[8].quantity > 0 
+			setButtonStatus(temp)	
+		}
+
+	},[product])
 
 	useEffect(() => {
 		if (orders && orders.length) {
@@ -267,17 +385,88 @@ const ProductPage = ({ history, match }) => {
 											</Row>
 										</ListGroup.Item>
 									)}
+									{/* IF/Else statement for kind of product here, so get the size chart based on it */}
+									<ListGroup.Item>
+											<Row>
+												<Col>
+													<strong>Size</strong>
+												</Col>
+												<Col>
+													<Form.Control
+														as='select'
+														value={quantity}
+														onChange={(e) =>
+															setSize(
+																e.target.value
+															)
+														}>
+														{/* create as many options as the countInStock */}
+														{[
+															...Array(
+																product.countInStock
+															).keys(),
+														].map((ele) => (
+															<option
+																key={ele + 1}
+																value={ele + 1}>
+																{ele + 1}
+															</option>
+														))}
+													</Form.Control>
+												</Col>
+											</Row>
+										</ListGroup.Item>
 									<ListGroup.Item>
 										<Row>
-											<Button
+											
+										{walletAddress===null && product.isMembersOnly === true && (
+														<Button
+														onClick={connectWallet}
+														type='button'
+														className='btn-block btn-lg'
+														disabled={
+															!buttonStatus
+														}>
+														Connect Wallet
+													</Button>
+											)}
+
+
+											{product.isMembersOnly === false && (
+													<Button
+													onClick={handleAddToCart}
+													type='button'
+													className='btn-block btn-lg'
+													disabled={
+														!buttonStatus
+													}>
+													Add To Cart
+												</Button>
+											)}
+
+											{walletAddress!==null && product.isMembersOnly === true && validNFT === true && (
+												<div>
+												<p>Congratulations, you have a valid NFT to buy this product !!</p>
+												
+												<Button
 												onClick={handleAddToCart}
 												type='button'
 												className='btn-block btn-lg'
 												disabled={
-													product.countInStock <= 0
-												}>
+													!buttonStatus
+											}>
 												Add To Cart
-											</Button>
+												</Button>
+												</div>
+											)}
+
+											{walletAddress!==null && product.isMembersOnly === true && validNFT === false && (
+												<div>
+												<p>Sorry :/ , you do not have a valid NFT to buy this product</p>
+												
+										
+												</div>
+											)}
 										</Row>
 									</ListGroup.Item>
 								</ListGroup>

@@ -16,11 +16,37 @@ const ProductEditPage = ({ match, history }) => {
 	const productId = match.params.id;
 	const [name, setName] = useState('');
 	const [brand, setBrand] = useState('');
-	const [category, setCategory] = useState('');
+	const [category, setCategory] = useState('T-Shirts');
 	const [description, setDescription] = useState('');
-	const [image, setImage] = useState('');
+	const [images, setImages] = useState(['']);
 	const [price, setPrice] = useState(0.0);
 	const [countInStock, setCountInStock] = useState(0);
+	const [isMembersOnly, setMembersOnlyStatus] = useState(false);
+
+	const [sizeStockCount, setSizeStockCount] = useState([
+		{size:"S", quantity:0},
+		{size:"M", quantity:0},
+		{size:"L", quantity:0},
+		{size:"XL", quantity:0},
+		{size:"XXL", quantity:0},
+		{size:"3XL", quantity:0},
+	])
+
+
+
+	const [ShoesizeStockCount, setShoesizeStockCountSizeStockCount] = useState([
+		{size:2, quantity:0},
+		{size:3, quantity:0},
+		{size:4, quantity:0},
+		{size:5, quantity:0},
+		{size:6, quantity:0},
+		{size:7, quantity:0},
+		{size:8, quantity:0},
+		{size:9, quantity:0},
+		{size:10, quantity:0},
+		{size:11, quantity:0},
+	])
+
 
 	// to upload product image
 	const [uploading, setUploading] = useState(false);
@@ -74,32 +100,64 @@ const ProductEditPage = ({ match, history }) => {
 			if (!product || product._id !== productId) {
 				dispatch(listProductDetails(productId));
 			} else {
-				setName(product.name);
-				setPrice(product.price);
-				setImage(product.image);
-				setBrand(product.brand);
-				setCategory(product.category);
-				setDescription(product.description);
-				setCountInStock(product.countInStock);
+				if(product.category === "Caps"){
+					setName(product.name);
+					setPrice(product.price);
+					setImages(product.image);
+					setBrand(product.brand);
+					setCategory(product.category);
+					setDescription(product.description);
+					setCountInStock(product.countInStock);
+					setMembersOnlyStatus(product.isMembersOnly);
+				}
+				else if(product.category==="Shoes"){
+					setName(product.name);
+					setPrice(product.price);
+					setImages(product.image);
+					setBrand(product.brand);
+					setCategory(product.category);
+					setDescription(product.description);
+					setShoesizeStockCountSizeStockCount(product.ShoesizeStockCount)
+					setMembersOnlyStatus(product.isMembersOnly);
+				}
+				else if(product.category === "T-Shirts" ||product.category === "Hoodies" ){
+					setName(product.name);
+					setPrice(product.price);
+					setImages(product.image);
+					setBrand(product.brand);
+					setCategory(product.category);
+					setDescription(product.description);
+					setSizeStockCount(product.sizeStockCount);
+					setMembersOnlyStatus(product.isMembersOnly);
+				}
+
+				
 			}
 		}
 	}, [product, dispatch, productId, history, successUpdate]);
 
 	// submit the product details
 	const handleSubmit = (e) => {
+		console.log(sizeStockCount)
+		
 		e.preventDefault();
-		dispatch(
-			updateProduct({
-				_id: productId,
-				name,
-				brand,
-				price,
-				category,
-				description,
-				countInStock,
-				image,
-			})
-		);
+	
+			dispatch(
+				updateProduct({
+					_id: productId,
+					name,
+					brand,
+					price,
+					category,
+					description,
+					countInStock,
+					ShoesizeStockCount,
+					sizeStockCount,
+					isMembersOnly,
+					images,
+				})
+			);
+		
 	};
 
 	// for image input, use a ref
@@ -109,6 +167,18 @@ const ProductEditPage = ({ match, history }) => {
 	const handleImageClick = () => {
 		inputFile.current.click();
 	};
+
+
+	//handling membersonly Status
+
+	const membersOnlyHandler = (event) =>{
+
+		const tempMemberStatus = event.target.value
+		
+		setMembersOnlyStatus(tempMemberStatus)
+	
+	}
+
 
 	// submit file to aws bucket, get the url
 	const handleFileUpload = async (e) => {
@@ -124,7 +194,7 @@ const ProductEditPage = ({ match, history }) => {
 			};
 
 			const { data } = await axios.post('/api/upload', formData, config);
-			setImage(data);
+			setImages(data);
 			setUploading(false);
 		} catch (error) {
 			setErrorImageUpload('Please choose a valid image');
@@ -218,9 +288,9 @@ const ProductEditPage = ({ match, history }) => {
 														size='lg'
 														placeholder='Enter image URL'
 														type='text'
-														value={image}
+														value={images}
 														onChange={(e) =>
-															setImage(
+															setImages(
 																e.target.value
 															)
 														}
@@ -242,7 +312,7 @@ const ProductEditPage = ({ match, history }) => {
 														alignSelf: 'center',
 													}}>
 													<Image
-														src={image}
+														src={images}
 														alt={name}
 														title='Click to input file'
 														style={{
@@ -287,17 +357,620 @@ const ProductEditPage = ({ match, history }) => {
 										controlId='categoryinput'
 										label='Category'
 										className='mb-3'>
-										<Form.Control
+										<Form.Select
 											size='lg'
-											placeholder='Enter category'
+											placeholder='Select category'
 											type='text'
 											value={category}
 											onChange={(e) =>
 												setCategory(e.target.value)
 											}
-										/>
+										>
+											<option value="null">Select a category</option>
+											<option value="T-Shirts">T-Shirts</option>
+											<option value="Hoodies">Hoodies</option>
+											<option value="Caps">Caps</option>
+											<option value="Shoes">Shoes</option>
+
+										</Form.Select>
 									</FloatingLabel>
 								</Form.Group>
+
+							
+								{
+									category === "T-Shirts" && (
+										
+								<Form.Group controlId='T-Shirt Sizes'>
+								<FloatingLabel
+									controlId='tshirtInput'
+									label='Enter Quantity For Tshirt Sizes'
+									className='mb-3'>
+									<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[0].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[0].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[0]}
+											tempItem.quantity = e.target.value
+											temp[0] = tempItem
+											setSizeStockCount(temp)
+							
+										}}	
+									
+									/>
+
+
+									<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[1].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[1].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[1]}
+											tempItem.quantity = e.target.value
+											temp[1] = tempItem
+											setSizeStockCount(temp)
+								
+											
+										}}	
+									
+									/>
+
+
+
+
+										<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[2].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[2].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[2]}
+											tempItem.quantity = e.target.value
+											temp[2] = tempItem
+											setSizeStockCount(temp)
+									
+											
+										}}	
+									
+									/>
+
+
+									<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[3].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[3].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[3]}
+											tempItem.quantity = e.target.value
+											temp[3] = tempItem
+											setSizeStockCount(temp)
+									
+											
+										}}	
+									
+									/>
+
+
+
+<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[4].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[4].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[4]}
+											tempItem.quantity = e.target.value
+											temp[4] = tempItem
+											setSizeStockCount(temp)
+					
+											
+										}}	
+									
+									/>
+
+
+<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[5].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[5].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[5]}
+											tempItem.quantity = e.target.value
+											temp[5] = tempItem
+											setSizeStockCount(temp)
+							
+											
+										}}	
+									
+									/>
+										
+
+								</FloatingLabel>
+							</Form.Group>
+									)
+								}
+
+
+
+								{ category === "Hoodies" && (
+										
+								<Form.Group controlId='hoodie'>
+								<FloatingLabel
+									controlId='hoodieInput'
+									label='Enter Quantity For Hoodie Sizes'
+									className='mb-3'>
+									<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[0].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[0].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[0]}
+											tempItem.quantity = e.target.value
+											temp[0] = tempItem
+											setSizeStockCount(temp)
+			
+										}}		
+									
+									/>
+
+
+									<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[1].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[1].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[1]}
+											tempItem.quantity = e.target.value
+											temp[1] = tempItem
+											setSizeStockCount(temp)
+						
+											
+										}}	
+									
+									/>
+
+
+
+
+										<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[2].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[2].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[2]}
+											tempItem.quantity = e.target.value
+											temp[2] = tempItem
+											setSizeStockCount(temp)
+						
+											
+										}}	
+									
+									/>
+
+
+									<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[3].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[3].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[3]}
+											tempItem.quantity = e.target.value
+											temp[3] = tempItem
+											setSizeStockCount(temp)
+										
+										}}	
+									
+									/>
+
+
+
+<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[4].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[4].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[4]}
+											tempItem.quantity = e.target.value
+											temp[4] = tempItem
+											setSizeStockCount(temp)
+									
+											
+										}}	
+									
+									/>
+
+
+<Form.Control
+										size='lg'
+										
+										type='text'
+										value={sizeStockCount[5].size}
+									/>
+
+									<Form.Control
+										size='lg'
+										placeholder='Enter Quantity'
+										type='text'
+										value={sizeStockCount[5].quantity}
+										onChange={(e)=>{
+											let temp = [...sizeStockCount]
+											let tempItem = {...temp[5]}
+											tempItem.quantity = e.target.value
+											temp[5] = tempItem
+											setSizeStockCount(temp)
+								
+											
+										}}	
+									
+									/>
+										
+
+								</FloatingLabel>
+								</Form.Group>
+								)}
+
+
+
+								{ category === "Shoes" && (
+										
+										<Form.Group controlId='Shoes'>
+										<FloatingLabel
+											controlId='shoeInput'
+											label='Enter Quantity For Shoe Sizes'
+											className='mb-3'>
+											
+						
+											<Form.Control
+												size='lg'
+												
+												type='text'
+												value={ShoesizeStockCount[0].size}
+											/>
+		
+											<Form.Control
+												size='lg'
+												placeholder='Enter Quantity'
+												type='text'
+												value={ShoesizeStockCount[0].quantity}
+												onChange={(e)=>{
+													let temp = [...ShoesizeStockCount]
+													let tempItem = {...temp[0]}
+													tempItem.quantity = e.target.value
+													temp[0] = tempItem
+													setShoesizeStockCountSizeStockCount(temp)
+								
+													
+												}}											
+											/>
+
+
+
+
+											<Form.Control
+												size='lg'
+												
+												type='text'
+												value={ShoesizeStockCount[1].size}
+											/>
+		
+											<Form.Control
+												size='lg'
+												placeholder='Enter Quantity'
+												type='text'
+												value={ShoesizeStockCount[1].quantity}
+												onChange={(e)=>{
+													let temp = [...ShoesizeStockCount]
+													let tempItem = {...temp[1]}
+													tempItem.quantity = e.target.value
+													temp[1] = tempItem
+													setShoesizeStockCountSizeStockCount(temp)
+									
+												}}											
+											/>
+
+
+<Form.Control
+												size='lg'
+												
+												type='text'
+												value={ShoesizeStockCount[2].size}
+											/>
+		
+											<Form.Control
+												size='lg'
+												placeholder='Enter Quantity'
+												type='text'
+												value={ShoesizeStockCount[2].quantity}
+												onChange={(e)=>{
+													let temp = [...ShoesizeStockCount]
+													let tempItem = {...temp[2]}
+													tempItem.quantity = e.target.value
+													temp[2] = tempItem
+													setShoesizeStockCountSizeStockCount(temp)
+								
+													
+												}}											
+											/>
+
+
+<Form.Control
+												size='lg'
+												
+												type='text'
+												value={ShoesizeStockCount[3].size}
+											/>
+		
+											<Form.Control
+												size='lg'
+												placeholder='Enter Quantity'
+												type='text'
+												value={ShoesizeStockCount[3].quantity}
+												onChange={(e)=>{
+													let temp = [...ShoesizeStockCount]
+													let tempItem = {...temp[3]}
+													tempItem.quantity = e.target.value
+													temp[3] = tempItem
+													setShoesizeStockCountSizeStockCount(temp)
+								
+													
+												}}											
+											/>
+
+
+<Form.Control
+												size='lg'
+												
+												type='text'
+												value={ShoesizeStockCount[4].size}
+											/>
+		
+											<Form.Control
+												size='lg'
+												placeholder='Enter Quantity'
+												type='text'
+												value={ShoesizeStockCount[4].quantity}
+												onChange={(e)=>{
+													let temp = [...ShoesizeStockCount]
+													let tempItem = {...temp[4]}
+													tempItem.quantity = e.target.value
+													temp[4] = tempItem
+													setShoesizeStockCountSizeStockCount(temp)
+								
+													
+												}}											
+											/>
+										
+
+
+
+
+										<Form.Control
+												size='lg'
+												
+												type='text'
+												value={ShoesizeStockCount[5].size}
+											/>
+		
+											<Form.Control
+												size='lg'
+												placeholder='Enter Quantity'
+												type='text'
+												value={ShoesizeStockCount[5].quantity}
+												onChange={(e)=>{
+													let temp = [...ShoesizeStockCount]
+													let tempItem = {...temp[5]}
+													tempItem.quantity = e.target.value
+													temp[5] = tempItem
+													setShoesizeStockCountSizeStockCount(temp)
+										
+													
+												}}											
+											/>
+
+
+
+
+											<Form.Control
+												size='lg'
+												
+												type='text'
+												value={ShoesizeStockCount[6].size}
+											/>
+		
+											<Form.Control
+												size='lg'
+												placeholder='Enter Quantity'
+												type='text'
+												value={ShoesizeStockCount[6].quantity}
+												onChange={(e)=>{
+													let temp = [...ShoesizeStockCount]
+													let tempItem = {...temp[6]}
+													tempItem.quantity = e.target.value
+													temp[6] = tempItem
+													setShoesizeStockCountSizeStockCount(temp)
+									
+													
+												}}											
+											/>
+
+
+<Form.Control
+												size='lg'
+												
+												type='text'
+												value={ShoesizeStockCount[7].size}
+											/>
+		
+											<Form.Control
+												size='lg'
+												placeholder='Enter Quantity'
+												type='text'
+												value={ShoesizeStockCount[7].quantity}
+												onChange={(e)=>{
+													let temp = [...ShoesizeStockCount]
+													let tempItem = {...temp[7]}
+													tempItem.quantity = e.target.value
+													temp[7] = tempItem
+													setShoesizeStockCountSizeStockCount(temp)
+						
+													
+												}}											
+											/>
+
+
+<Form.Control
+												size='lg'
+												
+												type='text'
+												value={ShoesizeStockCount[8].size}
+											/>
+		
+											<Form.Control
+												size='lg'
+												placeholder='Enter Quantity'
+												type='text'
+												value={ShoesizeStockCount[8].quantity}
+												onChange={(e)=>{
+													let temp = [...ShoesizeStockCount]
+													let tempItem = {...temp[8]}
+													tempItem.quantity = e.target.value
+													temp[8] = tempItem
+													setShoesizeStockCountSizeStockCount(temp)
+										
+													
+												}}											
+											/>
+
+
+<Form.Control
+												size='lg'
+												
+												type='text'
+												value={ShoesizeStockCount[9].size}
+											/>
+		
+											<Form.Control
+												size='lg'
+												placeholder='Enter Quantity'
+												type='text'
+												value={ShoesizeStockCount[9].quantity}
+												onChange={(e)=>{
+													let temp = [...ShoesizeStockCount]
+													let tempItem = {...temp[9]}
+													tempItem.quantity = e.target.value
+													temp[9] = tempItem
+													setShoesizeStockCountSizeStockCount(temp)
+										
+													
+												}}											
+											/>
+											
+										
+											
+												
+		
+										</FloatingLabel>
+										</Form.Group>
+										)}
+
+
 								<Form.Group controlId='description'>
 									<FloatingLabel
 										controlId='descinput'
@@ -314,24 +987,59 @@ const ProductEditPage = ({ match, history }) => {
 										/>
 									</FloatingLabel>
 								</Form.Group>
+								
+								
+								{category === "Caps" && (
+
 								<Form.Group controlId='countInStock'>
-									<FloatingLabel
-										controlId='countinstockinput'
-										label='CountInStock'
-										className='mb-3'>
-										<Form.Control
-											size='lg'
-											placeholder='Enter Count In Stock'
-											type='number'
-											min='0'
-											max='1000'
-											value={countInStock}
-											onChange={(e) =>
-												setCountInStock(e.target.value)
-											}
-										/>
-									</FloatingLabel>
+								<FloatingLabel
+									controlId='countinstockinput'
+									label='CountInStock'
+									className='mb-3'>
+									<Form.Control
+										size='lg'
+										placeholder='Enter Count In Stock'
+										type='number'
+										min='0'
+										max='1000'
+										value={countInStock}
+										onChange={(e) =>
+											setCountInStock(e.target.value)
+										}
+									/>
+								</FloatingLabel>
+
 								</Form.Group>
+
+
+								)}
+
+
+				
+
+								<Form.Group controlId='isMembersOnly'>
+									<FloatingLabel
+										controlId='membersOnlyInput'
+										label='Is this product members only?'
+										className='mb-3'>
+										<Form.Select
+											size='lg'
+											placeholder='Set Members Only Status'
+											value={isMembersOnly}
+											onChange={membersOnlyHandler}
+										>
+											<option value="false">No</option>
+											<option value="true">Yes</option>
+
+										</Form.Select>
+									</FloatingLabel>
+
+
+
+
+								</Form.Group>
+
+								
 								<div className='d-flex'>
 									<Button
 										type='submit'

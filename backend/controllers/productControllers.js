@@ -63,16 +63,38 @@ const deleteProduct = asyncHandler(async (req, res) => {
 const createProduct = asyncHandler(async (req, res) => {
 	// create a dummy product which can be edited later
 	const product = new Product({
-		name: 'Sample',
+		name: 'Sample Name',
 		brand: 'Sample Brand',
 		category: 'Sample Category',
 		numReviews: 0,
 		countInStock: 0,
+		ShoesizeStockCount:[
+			{size:2, quantity:0},
+			{size:3, quantity:0},
+			{size:4, quantity:0},
+			{size:5, quantity:0},
+			{size:6, quantity:0},
+			{size:7, quantity:0},
+			{size:8, quantity:0},
+			{size:9, quantity:0},
+			{size:10, quantity:0},
+			{size:11, quantity:0},
+		],
+		sizeStockCount:[
+			{size:"S", quantity:0},
+			{size:"M", quantity:0},
+			{size:"L", quantity:0},
+			{size:"XL", quantity:0},
+			{size:"XXL", quantity:0},
+			{size:"3XL", quantity:0},
+		],
+		isMembersOnly:false,
 		price: 0,
 		user: req.user._id,
 		image: '/images/alexa.jpg',
 		description: 'Sample description',
 	});
+	//console.log("PRODUCT DATA: " , product);
 	const createdProduct = await product.save();
 	res.status(201).json(createdProduct);
 });
@@ -88,11 +110,14 @@ const updateProduct = asyncHandler(async (req, res) => {
 		category,
 		numReviews,
 		countInStock,
+		ShoesizeStockCount,
+		sizeStockCount,
+		isMembersOnly,
 		description,
 		image,
 	} = req.body;
 	const product = await Product.findById(req.params.id);
-
+	//console.log("IN UPDATE: ", product)
 	// update the fields which are sent with the payload
 	if (product) {
 		if (name) product.name = name;
@@ -101,6 +126,9 @@ const updateProduct = asyncHandler(async (req, res) => {
 		if (category) product.category = category;
 		if (numReviews) product.numReviews = numReviews;
 		if (countInStock) product.countInStock = countInStock;
+		if (ShoesizeStockCount) product.ShoesizeStockCount = ShoesizeStockCount;
+		if (sizeStockCount) product.sizeStockCount = sizeStockCount;
+		if (isMembersOnly) product.isMembersOnly = isMembersOnly;
 		if (description) product.description = description;
 		if (image) product.image = image;
 

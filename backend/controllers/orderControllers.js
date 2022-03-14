@@ -65,9 +65,9 @@ const updateOrderToPay = asyncHandler(async (req, res) => {
 		order.isPaid = true;
 		order.paidAt = Date.now();
 		// update the payment result based on which mode of payment was chosen
-		if (paymentMode === 'paypal') {
+		if (paymentMode === 'Solana') {
 			order.paymentResult = {
-				type: 'paypal',
+				type: 'Solana',
 				id: req.body.id,
 				status: req.body.status,
 				update_time: req.body.update_time,

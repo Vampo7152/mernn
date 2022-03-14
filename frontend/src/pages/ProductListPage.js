@@ -129,12 +129,19 @@ const ProductListPage = ({ history, match }) => {
 								<th>PRICE</th>
 								<th>CATEGORY</th>
 								<th>BRAND</th>
+								<th>MEMBERS ONLY</th>
 								<th>ACTION</th>
+						
 							</tr>
 						</thead>
 						<tbody>
 							{products &&
 								products.map((product) => {
+
+									var productMemberStatus = product.isMembersOnly;
+									var memStatus = productMemberStatus.toString();
+								
+
 									return (
 										<tr key={product._id}>
 											<td>{product._id}</td>
@@ -152,6 +159,8 @@ const ProductListPage = ({ history, match }) => {
 											</td>
 											<td>{product.category}</td>
 											<td>{product.brand}</td>
+											<td>{memStatus}</td>
+							
 
 											<td
 												style={{

@@ -16,6 +16,18 @@ const reviewsSchema = mongoose.Schema(
 	{ timestamps: true }
 );
 
+
+const sizeSchema = mongoose.Schema({
+	size: {type:String, required:true},
+	quantity:{type:Number,required:true,default:0}
+})
+
+
+const shoesizeSchema = mongoose.Schema({
+	size: {type:Number, required:true},
+	quantity:{type:Number,required:true,default:0}
+})
+
 const productSchema = mongoose.Schema(
 	{
 		user: {
@@ -60,11 +72,26 @@ const productSchema = mongoose.Schema(
 			required: true,
 			default: 0,
 		},
+
+		sizeStockCount: [{
+			size: {type:String, required:true},
+			quantity:{type:Number,required:true,default:0}
+		}],
+		ShoesizeStockCount: [{
+				size: {type:Number, required:true},
+				quantity:{type:Number,required:true,default:0}
+		}],
 		countInStock: {
 			type: Number,
 			required: true,
 			default: 0,
 		},
+
+		isMembersOnly:{
+			type: Boolean,
+			required: true,
+			default: false,
+		}
 	},
 	{
 		timestamps: true,
