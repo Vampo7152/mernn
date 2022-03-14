@@ -5,4 +5,4 @@
    4.   `npm run dev` in root and it should work fine.
    
    
-### ping me up if you get any error around. Though I don't get any error most of the time, others do get it sometim.
+### ping me up if you get any error around. Though I don't get any error most of the time, others do get it sometime.
