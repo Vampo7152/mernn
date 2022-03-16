@@ -355,13 +355,13 @@ const ProductPage = ({ history, match }) => {
 												<strong>Status: </strong>
 											</Col>
 											<Col>
-												{product.countInStock > 0
+												{product.countInStock  > 0 || product.sizeStockCount[0].quantity > 0 || product.sizeStockCount[1].quantity > 0 || product.sizeStockCount[2].quantity > 0 || product.sizeStockCount[3].quantity > 0 || product.sizeStockCount[4].quantity > 0 || product.sizeStockCount[5].quantity > 0 || product.ShoesizeStockCount[0].quantity > 0 || product.ShoesizeStockCount[1].quantity > 0 || product.ShoesizeStockCount[2].quantity > 0 || product.ShoesizeStockCount[3].quantity > 0 || product.ShoesizeStockCount[4].quantity > 0 || product.ShoesizeStockCount[5].quantity > 0 || product.ShoesizeStockCount[6].quantity > 0 || product.ShoesizeStockCount[7].quantity > 0 || product.ShoesizeStockCount[8].quantity > 0 
 													? 'In Stock'
 													: 'Out of Stock'}
 											</Col>
 										</Row>
 									</ListGroup.Item>
-									{product.countInStock > 0 && (
+									{product.countInStock  > 0 || product.sizeStockCount[0].quantity > 0 || product.sizeStockCount[1].quantity > 0 || product.sizeStockCount[2].quantity > 0 || product.sizeStockCount[3].quantity > 0 || product.sizeStockCount[4].quantity > 0 || product.sizeStockCount[5].quantity > 0 || product.ShoesizeStockCount[0].quantity > 0 || product.ShoesizeStockCount[1].quantity > 0 || product.ShoesizeStockCount[2].quantity > 0 || product.ShoesizeStockCount[3].quantity > 0 || product.ShoesizeStockCount[4].quantity > 0 || product.ShoesizeStockCount[5].quantity > 0 || product.ShoesizeStockCount[6].quantity > 0 || product.ShoesizeStockCount[7].quantity > 0 || product.ShoesizeStockCount[8].quantity > 0  && (
 										<ListGroup.Item>
 											<Row>
 												<Col>
