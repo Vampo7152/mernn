@@ -18,6 +18,7 @@
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend"
   },
   "dependencies": {
+    "@solana/web3.js": "^1.36.0",
     "aws-sdk": "^2.983.0",
     "bcryptjs": "^2.4.3",
     "bignumber.js": "^9.0.2",
